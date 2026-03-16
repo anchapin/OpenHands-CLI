@@ -491,6 +491,7 @@ class BaseOpenHandsACPAgent(ACPAgent, ABC):
         self,
         cwd: str,  # noqa: ARG002
         mcp_servers: list[HttpMcpServer | SseMcpServer | McpServerStdio] | None = None,
+        working_dir: str | None = None,
         **_kwargs: Any,
     ) -> NewSessionResponse:
         """Create a new conversation session.
@@ -503,8 +504,6 @@ class BaseOpenHandsACPAgent(ACPAgent, ABC):
         Returns:
             NewSessionResponse with session ID and modes
         """
-
-        working_dir = cast(str | None, _kwargs.get("working_dir"))
 
         mcp_servers_dict = None
         if mcp_servers:

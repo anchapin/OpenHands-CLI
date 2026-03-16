@@ -256,6 +256,7 @@ class OpenHandsCloudACPAgent(BaseOpenHandsACPAgent):
         self,
         cwd: str,
         mcp_servers: list[HttpMcpServer | SseMcpServer | McpServerStdio] | None = None,
+        working_dir: str | None = None,
         **_kwargs: Any,
     ) -> NewSessionResponse:
         """Create a new conversation session with cloud workspace."""
@@ -266,7 +267,6 @@ class OpenHandsCloudACPAgent(BaseOpenHandsACPAgent):
                 {"reason": "Authentication required to create a cloud session"}
             )
 
-        working_dir = _kwargs.get("working_dir")
         return await super().new_session(
             cwd=cwd,
             mcp_servers=mcp_servers,

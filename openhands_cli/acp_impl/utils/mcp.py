@@ -3,10 +3,14 @@
 from collections.abc import Sequence
 from typing import Any
 
-from acp.schema import McpServerHttp, McpServerSse, McpServerStdio
+from acp.schema import (
+    HttpMcpServer,
+    McpServerStdio,
+    SseMcpServer,
+)
 
 
-ACPMCPServerType = McpServerStdio | McpServerHttp | McpServerSse
+ACPMCPServerType = McpServerStdio | HttpMcpServer | SseMcpServer
 
 
 def _convert_env_to_dict(env: Sequence[dict[str, str]]) -> dict[str, str]:
@@ -58,13 +62,13 @@ def convert_acp_mcp_servers_to_agent_format(
         if "env" in server_config:
             server_config["env"] = _convert_env_to_dict(server_config["env"])
 
-        # Add transport type based on server class
-        # McpServerStdio -> stdio, McpServerHttp -> http, McpServerSse -> sse
+        # Add transport type based on server class.
+        # McpServerStdio -> stdio, HttpMcpServer -> http, SseMcpServer -> sse
         if isinstance(server, McpServerStdio):
             server_config["transport"] = "stdio"
-        elif isinstance(server, McpServerHttp):
+        elif isinstance(server, HttpMcpServer):
             server_config["transport"] = "http"
-        elif isinstance(server, McpServerSse):
+        elif isinstance(server, SseMcpServer):
             server_config["transport"] = "sse"
 
         converted_servers[server_name] = server_config

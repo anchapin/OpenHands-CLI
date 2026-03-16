@@ -197,6 +197,7 @@ class LocalOpenHandsACPAgent(BaseOpenHandsACPAgent):
         self,
         cwd: str,
         mcp_servers: list[HttpMcpServer | SseMcpServer | McpServerStdio] | None = None,
+        working_dir: str | None = None,
         **_kwargs: Any,
     ) -> NewSessionResponse:
         """Create a new conversation session."""
@@ -207,10 +208,7 @@ class LocalOpenHandsACPAgent(BaseOpenHandsACPAgent):
                 {"reason": "Authentication required to create a session"}
             )
 
-        working_dir = _kwargs.get("working_dir")
-        effective_working_dir = (
-            working_dir if isinstance(working_dir, str) else cwd or str(Path.cwd())
-        )
+        effective_working_dir = working_dir or cwd or str(Path.cwd())
         logger.info(f"Using working directory: {effective_working_dir}")
 
         return await super().new_session(
